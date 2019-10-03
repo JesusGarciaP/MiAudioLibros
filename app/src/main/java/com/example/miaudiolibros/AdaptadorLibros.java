@@ -16,6 +16,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     private LayoutInflater inflador;      //Crea Layouts a partir del XML
     protected Vector<Libro> vectorLibros; //Vector con libros a visualizar
     private Context contexto;
+    private View.OnLongClickListener onLongClickListener;
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
@@ -35,6 +36,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = inflador.inflate(R.layout.elemento_selector,null); //comvierte un layaout en un view
         v.setOnClickListener(this.onClickListener);//se le esta asignando un escuchador a cada elemneto de la lista
+        v.setOnLongClickListener(onLongClickListener);
         return new ViewHolder(v);
     }
 
@@ -61,5 +63,9 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
             portada.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             titulo = (TextView) itemView.findViewById(R.id.titulo);
         }
+    }
+
+    public void setOnItemLongClickListener(View.OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
     }
 }
