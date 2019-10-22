@@ -150,4 +150,14 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     public int getAudioSessionId() {
         return 0;
     }
+
+    @Override
+    public void onResume() {
+        DetalleFragment detalleFragment = (DetalleFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_detalle);
+        if (detalleFragment == null) {
+            ((MainActivity) getActivity()).mostrarElementos(false);
+        }
+        super.onResume();
+    }
 }

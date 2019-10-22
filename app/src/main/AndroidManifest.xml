@@ -16,6 +16,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SelectorFragment">
+
+        </activity>
+        <activity android:name=".AdaptadorLibros">
+
+        </activity>
+        <activity android:name=".Aplicacion">
+
+        </activity>
+        <activity android:name=".DetalleFragment">
+
+        </activity>
+        <activity android:name=".Libro">
+
+        </activity>
     </application>
 
 </manifest>
