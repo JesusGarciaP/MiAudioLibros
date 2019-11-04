@@ -4,12 +4,14 @@
     android:layout_height="match_parent">
 
 
-    <fragment
-        android:id="@+id/selector_fragment"
-        android:name="com.example.miaudiolibros.SelectorFragment"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/contenedor_izquierdo"
+        android:orientation="vertical"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+    </LinearLayout>
 
     <fragment
         android:id="@+id/fragment_detalle"

@@ -112,7 +112,7 @@ private ActionBarDrawerToggle toggle;
                         break;
                 }
                 adaptador.notifyDataSetChanged();
-                adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
+
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -125,7 +125,7 @@ private ActionBarDrawerToggle toggle;
 
         });
 
-
+        adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
 
         /*recyclerView = findViewById(R.id.recycler_view);
         layoutManager = new GridLayoutManager(this,2);
@@ -178,14 +178,14 @@ private ActionBarDrawerToggle toggle;
         int id = item.getItemId();
         if (id == R.id.menu_preferencias) {
             Toast.makeText(this, "Preferencias", Toast.LENGTH_LONG).show();
+            abrePreferencias();
             return true;
         } else if (id == R.id.menu_acerca) {
-            /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Mensaje de Acerca De");
             builder.setPositiveButton(android.R.string.ok, null);
-            builder.create().show();*/
-            irUltimoVisitado();
-         return true;
+            builder.create().show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -252,4 +252,9 @@ private ActionBarDrawerToggle toggle;
         }
     }
 
+    public void abrePreferencias() {
+        int idContenedor = (findViewById(R.id.contenedor_pequeno) != null) ? R.id.contenedor_pequeno : R.id.contenedor_izquierdo;
+        PreferenciasFragment prefFragment = new PreferenciasFragment();
+        getSupportFragmentManager().beginTransaction().replace(idContenedor, prefFragment).addToBackStack(null).commit();
+    }
 }

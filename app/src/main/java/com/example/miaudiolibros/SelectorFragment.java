@@ -1,5 +1,7 @@
 package com.example.miaudiolibros;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Vector;
 
-public class SelectorFragment extends Fragment {
+public class SelectorFragment extends Fragment implements Animator.AnimatorListener {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -92,8 +94,12 @@ public class SelectorFragment extends Fragment {
                                         @Override
                                         public void onClick(View view) {
                                         //vectorLibros.remove(id);
+                                            Animator anim = AnimatorInflater.loadAnimator(actividad,R.animator.menguar);
+                                            anim.addListener(SelectorFragment.this);
+                                            anim.setTarget(v);
+                                            anim.start();
                                         adaptadorLibros.borrar(id);
-                                        adaptadorLibros.notifyDataSetChanged();
+                                        //adaptadorLibros.notifyDataSetChanged();
                                         }
                                     }).show();
                                     break;
@@ -173,5 +179,25 @@ public class SelectorFragment extends Fragment {
     public void onResume() {
         ((MainActivity) getActivity()).mostrarElementos(true);
         super.onResume();
+    }
+
+    @Override
+    public void onAnimationStart(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        adaptadorLibros.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
+
     }
 }
