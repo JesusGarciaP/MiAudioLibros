@@ -1,5 +1,7 @@
 package com.example.miaudiolibros;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,11 +16,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 
-public class DetalleFragment extends Fragment implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl {
+public class DetalleFragment extends Fragment implements View.OnTouchListener, MediaController.MediaPlayerControl {
 
     public static String ARG_ID_LIBRO = "id_libro";
     MediaPlayer mediaPlayer;
@@ -27,10 +31,25 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     private void ponInfoLibro(int id, View vista) {
         Libro libro = Libro.ejemploLibros().elementAt(id);
         ((TextView) vista.findViewById(R.id.titulo)).setText(libro.titulo);
+        String guartarBookLibroName = libro.titulo;
         ((TextView) vista.findViewById(R.id.autor)).setText(libro.autor);
         ((ImageView) vista.findViewById(R.id.portada)).setImageResource(libro.recursoImagen);
         vista.setOnTouchListener(this);
-        if (mediaPlayer != null){
+
+        mediaController = new MediaController(getActivity()); // Establece una nueva instancia.
+        Uri audio = Uri.parse(libro.urlAudio); // Uri que maneja la localización de archivos.
+        String enviarUri = String.valueOf(audio);
+
+        SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (preferencias.getBoolean("pref_autoreproducir", true)) {
+            Intent serviceIntent = new Intent(getActivity().getApplicationContext(), ServicioLibros.class);
+            serviceIntent.putExtra("inputExtra", enviarUri);
+            serviceIntent.putExtra("bookName", guartarBookLibroName);
+            ContextCompat.startForegroundService(getActivity(), serviceIntent);
+        }
+
+
+        /*if (mediaPlayer != null){
             mediaPlayer.release();
         }
         mediaPlayer = new MediaPlayer();
@@ -42,11 +61,16 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             Log.e("Audiolibros", "ERROR: No se puede reproducir "+audio,e);
-        }
+        }*/
     }
 
     public void ponInfoLibro(int id) {
         ponInfoLibro(id, getView());
+        mediaController.setMediaPlayer(this);
+        mediaController.setAnchorView(getView().findViewById(R.id.fragment_detalle));
+        mediaController.setPadding(0, 0, 0, 110);
+        mediaController.setEnabled(true);
+        mediaController.show();
     }
 
     @Nullable
@@ -66,7 +90,9 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         return vista;
     }
 
-    @Override
+    ServicioLibros servicioLibros;
+
+    /*@Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d("Audiolibros", "Entramos en onPrepared de MediaPlayer");
         mediaPlayer.start();
@@ -75,7 +101,7 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         //mediaController.setPadding(0, 0, 0,110);
         mediaController.setEnabled(true);
         mediaController.show();
-    }
+    }*/
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -86,31 +112,37 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     @Override public void onStop() {
         mediaController.hide();
         try {
-            mediaPlayer.stop();
-            mediaPlayer.release();
+            /*mediaPlayer.stop();
+            mediaPlayer.release();*/
+            servicioLibros.mediaPlayer.stop();
+            servicioLibros.mediaPlayer.release();
         } catch (Exception e) {
             Log.d("Audiolibros", "Error en mediaPlayer.stop()");   }   super.onStop();
     }
 
     @Override
     public void start() {
-        mediaPlayer.start();
+        //mediaPlayer.start();
+        servicioLibros.mediaPlayer.start();
     }
 
     @Override
     public void pause() {
-        mediaPlayer.pause();
+        //mediaPlayer.pause();
+        servicioLibros.mediaPlayer.pause();
     }
 
     @Override
     public int getDuration() {
-        return mediaPlayer.getDuration();
+        //return mediaPlayer.getDuration();
+        return servicioLibros.mediaPlayer.getDuration();
     }
 
     @Override
     public int getCurrentPosition() {
         try {
-            return mediaPlayer.getCurrentPosition();
+            //return mediaPlayer.getCurrentPosition();
+            return servicioLibros.mediaPlayer.getCurrentPosition();
         } catch (Exception e) {
             return 0;
         }
@@ -118,12 +150,14 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public void seekTo(int i) {
-        mediaPlayer.seekTo(i);
+        //mediaPlayer.seekTo(i);
+        servicioLibros.mediaPlayer.seekTo(i);
     }
 
     @Override
     public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        //return mediaPlayer.isPlaying();
+        return servicioLibros.mediaPlayer.isPlaying();
     }
 
     @Override

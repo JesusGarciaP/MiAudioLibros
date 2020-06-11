@@ -76,7 +76,7 @@ public class SelectorFragment extends Fragment implements Animator.AnimatorListe
             public boolean onLongClick(final View v) {
                 final int id = recyclerView.getChildAdapterPosition(v);
                 AlertDialog.Builder menu = new AlertDialog.Builder(actividad);
-                CharSequence[] opciones = { "Compartir", "Borrar ", "Insertar" };
+                CharSequence[] opciones = {"Compartir", "Borrar ", "Insertar"};
                 menu.setItems(opciones, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int opcion) {
                         switch (opcion) {
@@ -88,33 +88,31 @@ public class SelectorFragment extends Fragment implements Animator.AnimatorListe
                                 i.putExtra(Intent.EXTRA_TEXT, libro.urlAudio);
                                 startActivity(Intent.createChooser(i, "Compartir"));
                                 break;
-                                case 1: //Borrar
-                                    Snackbar.make(v,"¿Estás seguro?", Snackbar.LENGTH_LONG).setAction("SI",
-                                            new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                        //vectorLibros.remove(id);
-                                            Animator anim = AnimatorInflater.loadAnimator(actividad,R.animator.menguar);
-                                            anim.addListener(SelectorFragment.this);
-                                            anim.setTarget(v);
-                                            anim.start();
-                                        adaptadorLibros.borrar(id);
-                                        //adaptadorLibros.notifyDataSetChanged();
-                                        }
-                                    }).show();
-                                    break;
-                                case 2: //Insertar
-                                    //vectorLibros.add(vectorLibros.elementAt(id));
-                                    int posicion = recyclerView.getChildLayoutPosition(v);
-                                    adaptadorLibros.insertar((Libro) adaptadorLibros.getItem(posicion));
-                                    adaptadorLibros.notifyDataSetChanged();
-                                    Snackbar.make(v,"Libro insertado", Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        }
-                                    }).show();
-                                    break;
+                            case 1: //Borrar
+                                Snackbar.make(v, "¿Estás seguro?", Snackbar.LENGTH_LONG)
+                                        .setAction("SI", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                //vectorLibros.remove(id);
+                                                adaptadorLibros.borrar(id);
+                                                adaptadorLibros.notifyDataSetChanged();
+                                            }
+                                        })
+                                        .show();
+                                break;
+                            case 2: //Insertar
+                                //vectorLibros.add(vectorLibros.elementAt(id));
+                                int posicion = recyclerView.getChildLayoutPosition(v);
+                                adaptadorLibros.insertar((Libro) adaptadorLibros.getItem(posicion));
+                                adaptadorLibros.notifyDataSetChanged();
+                                Snackbar.make(v, "Libro insertado", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("OK", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                            }
+                                        })
+                                        .show();
+                                break;
                         }
                     }
                 });
@@ -122,7 +120,9 @@ public class SelectorFragment extends Fragment implements Animator.AnimatorListe
                 return true;
             }
         });
+
         setHasOptionsMenu(true);
+
         return v;
     }
 

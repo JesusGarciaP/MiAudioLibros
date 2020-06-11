@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.miaudiolibros">
-<uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".Aplicacion"
         android:allowBackup="true"
@@ -35,6 +38,7 @@
         <activity android:name=".PreferenciasActivity">
 
         </activity>
+        <service android:name=".ServicioLibros"></service>
     </application>
 
 </manifest>

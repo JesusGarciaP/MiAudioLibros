@@ -43,12 +43,6 @@ private ActionBarDrawerToggle toggle;
         setContentView(R.layout.activity_main);
 
 
-        if ((findViewById(R.id.contenedor_pequeno) != null)
-                &&(getSupportFragmentManager().findFragmentById(R.id.contenedor_pequeno) == null)){
-                SelectorFragment primerFragment = new SelectorFragment();
-                getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequeno, primerFragment).commit();
-        }
-
         // Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,14 +58,43 @@ private ActionBarDrawerToggle toggle;
                 R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         //Botón flotante
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                irUltimoVisitado();
             }
         });
+
+        int idContenedor = (findViewById(R.id.contenedor_pequeno) != null) ? R.id.contenedor_pequeno : R.id.contenedor_izquierdo;
+        SelectorFragment primerFragment = new SelectorFragment();
+        getSupportFragmentManager().beginTransaction().add(idContenedor, primerFragment).commit();
+
+        /*if ((findViewById(R.id.contenedor_pequeno) != null)
+                &&(getSupportFragmentManager().findFragmentById(R.id.contenedor_pequeno) == null)){
+                SelectorFragment primerFragment = new SelectorFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequeno, primerFragment).commit();
+        }*/
+
+
+        /*recyclerView = findViewById(R.id.recycler_view);
+        layoutManager = new GridLayoutManager(this,2);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
+        AdaptadorLibros adp = new AdaptadorLibros(this,Libro.ejemploLibros());
+        adp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String item = ((TextView)view.findViewById(R.id.titulo)).getText().toString();
+                Toast.makeText(MainActivity.this,"se disparo el click item: "+item,Toast.LENGTH_LONG).show();
+            }
+        });
+        recyclerView.setAdapter(adp);*/
 
 
         //BarLayout
@@ -126,22 +149,6 @@ private ActionBarDrawerToggle toggle;
         });
 
         adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
-
-        /*recyclerView = findViewById(R.id.recycler_view);
-        layoutManager = new GridLayoutManager(this,2);
-        recyclerView.setLayoutManager(layoutManager);
-
-
-
-        AdaptadorLibros adp = new AdaptadorLibros(this,Libro.ejemploLibros());
-        adp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String item = ((TextView)view.findViewById(R.id.titulo)).getText().toString();
-                Toast.makeText(MainActivity.this,"se disparo el click item: "+item,Toast.LENGTH_LONG).show();
-            }
-        });
-        recyclerView.setAdapter(adp);*/
     }
 
     public void mostrarDetalle(int id) {
@@ -185,6 +192,9 @@ private ActionBarDrawerToggle toggle;
             builder.setMessage("Mensaje de Acerca De");
             builder.setPositiveButton(android.R.string.ok, null);
             builder.create().show();
+            return true;
+        }else if (id == R.id.menu_ultimo) {
+            irUltimoVisitado();
             return true;
         }
         return super.onOptionsItemSelected(item);
